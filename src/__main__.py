@@ -46,8 +46,8 @@ def main() -> None:
         functions = load_func_def("data/input/functions_definition.json")
         prompts = load_test_promts("data/input/function_calling_tests.json")
         # print(sys.path[0])
-        # model  = Small_LLM_Model()
-        # print(model.get_path_to_vocab_file())
+        model  = Small_LLM_Model()
+        print(model.get_path_to_vocab_file())
         # for function in functions :
         #     print(function)
         for pr in prompts :
