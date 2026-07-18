@@ -63,19 +63,20 @@ from llm_sdk import Small_LLM_Model
 # c = b
 # print(c)
 
-my_prompt = "whatisthesumofprimenumbersbetween1and10?"
-model = Small_LLM_Model()
+# my_prompt = "whatisthesumofprimenumbersbetween1and10?"
+# model = Small_LLM_Model()
 
 
-lst_ids = model.encode(my_prompt)[0].tolist()
+# lst_ids = model.encode(my_prompt)[0].tolist()
 
-print(lst_ids)
-# lo = max(lst_ids,key= lambda x: model.get_logits_from_input_ids(lst_ids)[x])
+# print(lst_ids)
+# # lo = max(lst_ids,key= lambda x: model.get_logits_from_input_ids(lst_ids)[x])
 
-# text = model.decode(lo)
-# print(text)
+# # text = model.decode(lo)
+# # print(text)
 
-print(model.get_logits_from_input_ids(lst_ids))
+# print(model.get_logits_from_input_ids(lst_ids))
 
 
-# print(len(lst_ids)) 
+# # print(len(lst_ids)) 
+

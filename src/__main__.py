@@ -1,8 +1,11 @@
 import argparse
-from pathlib import Path
+# from pathlib import Path
 import sys
 from .parser_methods import load_func_def , load_test_promts
 from llm_sdk import Small_LLM_Model
+from .vocab import load_vocab
+
+
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments"""
     parser = argparse.ArgumentParser(
@@ -34,7 +37,7 @@ def parse_args() -> argparse.Namespace:
     return parser.parse_args()
 
 
-
+import json
 
 def main() -> None:
 
@@ -50,9 +53,12 @@ def main() -> None:
         print(model.get_path_to_vocab_file())
         # for function in functions :
         #     print(function)
-        for pr in prompts :
-            print(pr)
+        # for pr in prompts :
+        #     print(pr)
         # print(prompts)
+
+        with open("test.json" , 'w') as f :
+            json.dump(load_vocab(model.get_path_to_vocab_file()) , f)
     except Exception as e:
         print(e)
     pass
