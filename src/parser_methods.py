@@ -8,7 +8,7 @@ class InputFileError(Exception):
     """ This for raising error when a file is missing or invalid """
     
 
-def load_func_def(path : str) :
+def load_func_def(path : str) -> list[FunctionDefinition]:
     """ load and validate the function definitions file """
 
     try:

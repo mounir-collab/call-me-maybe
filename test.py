@@ -63,20 +63,21 @@ from llm_sdk import Small_LLM_Model
 # c = b
 # print(c)
 
-# my_prompt = "whatisthesumofprimenumbersbetween1and10?"
-# model = Small_LLM_Model()
+my_prompt = "what is the sum of prime numbers between 1 and 10?"
+model = Small_LLM_Model()
 
 
-# lst_ids = model.encode(my_prompt)[0].tolist()
+lst_ids = model.encode(my_prompt)[0].tolist()
 
 # print(lst_ids)
-# # lo = max(lst_ids,key= lambda x: model.get_logits_from_input_ids(lst_ids)[x])
+# lo = max(lst_ids,key= lambda x: model.get_logits_from_input_ids(lst_ids)[x])
 
-# # text = model.decode(lo)
-# # print(text)
+# text = model.decode(lo)
+# print(text)
+import numpy as np
+logits = model.get_logits_from_input_ids(lst_ids)
+print(model.decode(np.argmax(logits)))
 
-# print(model.get_logits_from_input_ids(lst_ids))
 
-
-# # print(len(lst_ids)) 
+# print(len(lst_ids)) 
 

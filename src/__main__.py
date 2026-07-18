@@ -4,7 +4,8 @@ import sys
 from .parser_methods import load_func_def , load_test_promts
 from llm_sdk import Small_LLM_Model
 from .vocab import load_vocab
-
+from .sytem_promt import build_system_prompt
+from .constrained import constrained_decoding
 
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments"""
@@ -44,21 +45,45 @@ def main() -> None:
     ob_args = parse_args()
     # print(ob_args.__dict__)
     # print(ob_args.functions_definition)
-    
+    output : list [str] = []
+
     try :
         functions = load_func_def("data/input/functions_definition.json")
         prompts = load_test_promts("data/input/function_calling_tests.json")
+
         # print(sys.path[0])
         model  = Small_LLM_Model()
-        print(model.get_path_to_vocab_file())
+        # print(model.get_path_to_vocab_file())
         # for function in functions :
         #     print(function)
         # for pr in prompts :
         #     print(pr)
         # print(prompts)
 
-        with open("test.json" , 'w') as f :
-            json.dump(load_vocab(model.get_path_to_vocab_file()) , f)
+        # with open("test.json" , 'w') as f :
+        #     json.dump(load_vocab(model.get_path_to_vocab_file()) , f)
+
+        # print(build_system_prompt(model , functions))
+
+        system_prompt_ids = build_system_prompt(model , functions)
+        lst_fn_names : list[str] = [f.name for f in functions] + ["ft_none"]
+        lst_fn_names_ids : list[int]= [model.encode(name)[0].tolist() for name in lst_fn_names]
+
+        # print(lst_fn_names)
+        # print(lst_fn_names_ids)
+        
+        for prompt in prompts :
+            # user_prompt_ids = model.encode(prompt)[0].tolist()
+            # input_ids = (
+            #     system_prompt_ids +
+            #     user_prompt_ids
+            # )
+            res: str = constrained_decoding(prompt, model, system_prompt_ids, lst_fn_names_ids, lst_fn_names)
+            # print(res)
+            # output.append(res)
+
+            # input_ids , lst_fn_names , lst_ids_fn , Functions definitions , prompt 
+            
     except Exception as e:
         print(e)
     pass
