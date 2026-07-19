@@ -6,7 +6,7 @@ from llm_sdk import Small_LLM_Model
 from .vocab import load_vocab
 from .sytem_promt import build_system_prompt
 from .constrained import constrained_decoding
-
+import time
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments"""
     parser = argparse.ArgumentParser(
@@ -41,7 +41,7 @@ def parse_args() -> argparse.Namespace:
 import json
 
 def main() -> None:
-
+    start = time.time()
     ob_args = parse_args()
     # print(ob_args.__dict__)
     # print(ob_args.functions_definition)
@@ -65,13 +65,16 @@ def main() -> None:
 
         # print(build_system_prompt(model , functions))
 
-        system_prompt_ids = build_system_prompt(model , functions)
+        # system_prompt_ids = build_system_prompt(model , functions)
+        system_prompt_ids = []
         lst_fn_names : list[str] = [f.name for f in functions] + ["ft_none"]
         lst_fn_names_ids : list[int]= [model.encode(name)[0].tolist() for name in lst_fn_names]
 
         # print(lst_fn_names)
         # print(lst_fn_names_ids)
         
+        # print(prompts)
+
         for prompt in prompts :
             # user_prompt_ids = model.encode(prompt)[0].tolist()
             # input_ids = (
@@ -79,11 +82,11 @@ def main() -> None:
             #     user_prompt_ids
             # )
             res: str = constrained_decoding(prompt, model, system_prompt_ids, lst_fn_names_ids, lst_fn_names)
-            # print(res)
+            print(res)
             # output.append(res)
-
             # input_ids , lst_fn_names , lst_ids_fn , Functions definitions , prompt 
-            
+        end = time.time()
+        print("the time is : " , end - start)        
     except Exception as e:
         print(e)
     pass

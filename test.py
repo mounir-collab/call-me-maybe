@@ -1,6 +1,6 @@
-from pydantic import BaseModel
-from src.models import FunctionDefinition , ReturnFunc , FunctionParms
-from llm_sdk import Small_LLM_Model 
+# from pydantic import BaseModel
+# from src.models import FunctionDefinition , ReturnFunc , FunctionParms
+# from llm_sdk import Small_LLM_Model 
 
 
 
@@ -63,21 +63,58 @@ from llm_sdk import Small_LLM_Model
 # c = b
 # print(c)
 
-my_prompt = "what is the sum of prime numbers between 1 and 10?"
-model = Small_LLM_Model()
+# my_prompt = "what is the sum of prime numbers between 1 and 10?"
+# model = Small_LLM_Model()
 
 
-lst_ids = model.encode(my_prompt)[0].tolist()
+# lst_ids = model.encode(my_prompt)[0].tolist()
 
-# print(lst_ids)
-# lo = max(lst_ids,key= lambda x: model.get_logits_from_input_ids(lst_ids)[x])
+# # print(lst_ids)
+# # lo = max(lst_ids,key= lambda x: model.get_logits_from_input_ids(lst_ids)[x])
 
-# text = model.decode(lo)
-# print(text)
-import numpy as np
-logits = model.get_logits_from_input_ids(lst_ids)
-print(model.decode(np.argmax(logits)))
+# # text = model.decode(lo)
+# # print(text)
+# import numpy as np
+# logits = model.get_logits_from_input_ids(lst_ids)
+# print(model.decode(np.argmax(logits)))
 
 
 # print(len(lst_ids)) 
 
+
+# a = [ 1 , 2 , 3]
+# b = [4 , 5]
+
+# c = a.extend(b)
+
+# print(c)
+
+# a.append(b)
+# print(a)
+# a.extend(b)
+# print(a)
+
+
+# a = 10 
+
+a = 10
+print(id(a))
+a = 2
+print(id(a))
+b = [1 , 2]
+
+
+def do(d):
+    d.append(1)
+
+def add(a):
+    a+=1
+
+
+add(a)
+
+# add()
+
+do(b)
+print(a)
+print(b)
