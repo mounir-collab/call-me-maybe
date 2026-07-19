@@ -1,4 +1,4 @@
-# from pydantic import BaseModel
+from pydantic import BaseModel
 # from src.models import FunctionDefinition , ReturnFunc , FunctionParms
 # from llm_sdk import Small_LLM_Model 
 
@@ -32,9 +32,9 @@
 #     # returns= {"type": "number"}
 # )
 
-# class arobas(BaseModel):
-#     first_name : str
-#     last_name : str
+class arobas(BaseModel):
+    first_name : str
+    last_name : str
 
 
 
@@ -43,7 +43,8 @@
 #     "first_name" : "aq"
 # }
 
-# a = arobas( "az", last_name =  "ss")
+a = arobas( first_name = "az", last_name =  "ss")
+print(a["first_name"])
 # a = arobas(**dicti)
 
 # class a(BaseModel) :
@@ -97,24 +98,33 @@
 
 # a = 10 
 
-a = 10
-print(id(a))
-a = 2
-print(id(a))
-b = [1 , 2]
+# a = 10
+# print(id(a))
+# a = 2
+# print(id(a))
+# b = [1 , 2]
 
 
-def do(d):
-    d.append(1)
+# def do(d):
+#     d.append(1)
 
-def add(a):
-    a+=1
+# def add(a):
+#     a+=1
 
 
-add(a)
+# add(a)
 
-# add()
+# # add()
 
-do(b)
-print(a)
-print(b)
+# do(b)
+# print(a)
+# print(b)
+
+
+a = [1 , 2 , 3]
+
+b = [4]
+
+print(a + b)
+
+

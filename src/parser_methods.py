@@ -22,7 +22,18 @@ def load_func_def(path : str) -> list[FunctionDefinition]:
         raise InputFileError(f"Invalid JSON in {path}: {e}") from e
 
     try :
-        return [FunctionDefinition(**item) for item in content ]
+        ft_none = FunctionDefinition(**{
+            "name" : "ft_none",
+            "description" : "None",
+            "parameters" : {
+                "param" : {
+                    "type" : "None"
+                }
+            },
+            "returns" : {
+                    "type" : "None"}
+                })
+        return [FunctionDefinition(**item) for item in content ] + [ft_none]
     except ValidationError as e:
         raise InputFileError(f"Invalid function definition schema in {path}: {e}") from e
     except Exception as e :

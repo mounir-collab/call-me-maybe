@@ -1,5 +1,5 @@
 from llm_sdk import Small_LLM_Model
-
+from .models import FunctionDefinition
 
 # def get_fn_name(res , model: Small_LLM_Model , system_prompt_ids , lst_fn_names_ids , lst_fn_names):
 #     fn_name : str = ""
@@ -19,7 +19,7 @@ def get_fn_name(
     model,
     system_prompt_ids,
     lst_fn_names_ids,
-    lst_fn_names
+    lst_fn
 ):
     fn_name = ""
 
@@ -57,7 +57,31 @@ def get_fn_name(
         # print(res)
         # print(model.decode(res)[0])
         # exit(0)
-        if fn_name in lst_fn_names:
-            return fn_name
+        # if f.name in lst_fn:
+        #     return f.name
+        if fn_name in [f.name for f in lst_fn]:
+            break
+
     # print(fn_name)
     # return fn_name
+
+
+def get_params(function : FunctionDefinition , model : Small_LLM_Model ):
+    
+    res : list[int] = []
+
+    var1 : str =  '"parameters": {'
+    var1_ids = model.encode(var1)[0].tolist()
+
+    fn_name = function.name
+    
+    for param_name , param_type in function.parameters.items() :
+        
+        if param_type.type == "integer":
+            pass
+        elif param_type.type == "float":
+            pass
+        elif param_type.type == "number":
+            pass
+        elif param_type.type == "string":
+            pass

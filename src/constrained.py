@@ -9,7 +9,7 @@ def get_params(res ):
     pass
 
 
-def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_prompt_ids, lst_fn_names_ids, lst_fn_names):
+def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_prompt_ids, lst_fn_names_ids, lst_fn):
     res : list[int] = []
     
     var1 = '{' + f'\n "prompt": "{prompt.prompt}",\n "name": "'
@@ -21,7 +21,7 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
 
 
     # print(res)
-    get_fn_name(res , model , system_prompt_ids , lst_fn_names_ids , lst_fn_names)
+    get_fn_name(res , model , system_prompt_ids , lst_fn_names_ids , lst_fn)
     # print(res)
     # print(name)
     # print(model.decode(res)[0])
