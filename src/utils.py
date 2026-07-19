@@ -65,7 +65,7 @@ def get_fn_name(
     # print(fn_name)
     # return fn_name
 
-
+# res
 def get_params(function : FunctionDefinition , model : Small_LLM_Model ):
     
     res : list[int] = []
@@ -84,4 +84,6 @@ def get_params(function : FunctionDefinition , model : Small_LLM_Model ):
         elif param_type.type == "number":
             pass
         elif param_type.type == "string":
+            pass
+        elif param_type.type == "boolean":
             pass

@@ -16,7 +16,6 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
     # print(var1)
     var1_ids = model.encode(var1)[0].tolist()
     res.append(var1_ids)
-    # print(res, "\n\n\n\n\n\n\n\n\n\n\n\n")
     system_prompt_ids.extend(var1_ids)
 
 
@@ -30,20 +29,20 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
     # sys.exit(0)
 
 
-    # var2 : str =  f'",\n "parameters": '
-    # var2_ids = model.encode(var2)
+    var2 : str =  f'",\n "parameters": '
+    var2_ids = model.encode(var2)
 
-    # res.append(var2_ids)
-    # system_prompt_ids.extend(var2_ids)
+    res.append(var2_ids)
+    system_prompt_ids.extend(var2_ids)
 
 
-    # get_params(res , system_prompt_ids )
+    get_params(res , system_prompt_ids )
 
-    # var3 : str = "\n}"
+    var3 : str = "\n}"
 
-    # var3_ids : list[int] = model.encode(var3)
+    var3_ids : list[int] = model.encode(var3)
 
-    # res.append(var3_ids)
+    res.append(var3_ids)
     # exit(0)
     # print(model.decode(res))
     # print("".join(item) )

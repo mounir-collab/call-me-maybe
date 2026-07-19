@@ -55,13 +55,13 @@ def main() -> None:
     fn = functions[0]
 
     # fn.parameters
-    ad = fn.parameters.items()
-    for name_param , type_param in ad :
-        print(name_param)
-        print(type_param.type)
+    # ad = fn.parameters.items()
+    # for name_param , type_param in ad :
+    #     print(name_param)
+    #     print(type_param.type)
     
     # print(ad)
-    exit(0)
+    # exit(0)
     # print(functions)
     # print(function)
     # print(sys.path[0])
