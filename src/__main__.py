@@ -1,3 +1,7 @@
+import os
+from dotenv import load_dotenv
+
+
 import argparse
 # from pathlib import Path
 import sys
@@ -8,6 +12,11 @@ from .sytem_promt import build_system_prompt
 from .constrained import constrained_decoding
 import time
 from .models import FunctionDefinition
+
+load_dotenv()
+# HF_TOKEN = os.getenv("HF_TOKEN")
+# print(HF_TOKEN)
+
 def parse_args() -> argparse.Namespace:
     """Parse command-line arguments"""
     parser = argparse.ArgumentParser(
@@ -52,7 +61,7 @@ def main() -> None:
     functions : list[FunctionDefinition] = load_func_def("data/input/functions_definition.json")
     prompts = load_test_promts("data/input/function_calling_tests.json")
 
-    fn = functions[0]
+    # fn = functions[0]
 
     # fn.parameters
     # ad = fn.parameters.items()

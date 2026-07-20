@@ -32,19 +32,19 @@ from pydantic import BaseModel
 #     # returns= {"type": "number"}
 # )
 
-class arobas(BaseModel):
-    first_name : str
-    last_name : str
+# class arobas(BaseModel):
+#     first_name : str
+#     last_name : str
 
 
 
-# dicti = {
-#     "last_name" : "add" ,
-#     "first_name" : "aq"
-# }
+# # dicti = {
+# #     "last_name" : "add" ,
+# #     "first_name" : "aq"
+# # }
 
-a = arobas( first_name = "az", last_name =  "ss")
-print(a["first_name"])
+# a = arobas( first_name = "az", last_name =  "ss")
+# print(a["first_name"])
 # a = arobas(**dicti)
 
 # class a(BaseModel) :
@@ -121,10 +121,36 @@ print(a["first_name"])
 # print(b)
 
 
-a = [1 , 2 , 3]
+# a = [1 , 2 , 3]
 
-b = [4]
+# b = [4]
 
-print(a + b)
+# print(a + b)
 
 
+d = {
+    "name": "fn_add_numbers",
+    "description": "Add two numbers together and return their sum.",
+    "parameters": {
+      "a": {
+        "type": "number"
+      },
+      "b": {
+        "type": "number"
+      }
+    },
+    "returns": {
+      "type": "number"
+    }
+}
+
+print(d["parameters"].items())
+# for x_name , y_type in d["parameters"].items() :
+#     print(x_name)
+#     print(y_type)
+
+
+for index , (param_name , param_def) in enumerate(d["parameters"].items() , 0) :
+    print(index)
+    print(param_name)
+    print(param_def)

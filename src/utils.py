@@ -20,7 +20,7 @@ def get_fn_name(
     system_prompt_ids,
     lst_fn_names_ids,
     lst_fn
-):
+) -> str:
     fn_name = ""
 
     # print(model.decode(res)[0])
@@ -60,10 +60,10 @@ def get_fn_name(
         # if f.name in lst_fn:
         #     return f.name
         if fn_name in [f.name for f in lst_fn]:
-            break
+            return fn_name 
 
     # print(fn_name)
-    # return fn_name
+    return fn_name
 
 # res
 def get_params(function : FunctionDefinition , model : Small_LLM_Model ):

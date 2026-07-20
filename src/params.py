@@ -14,7 +14,7 @@ from src.models import FunctionDefinition
 #             dict: Generated parameters as a dictionary,
 #             or an empty dict if decoding fails.
 #         """
-#         generation: List = []
+#         generation: list = []
 #         input_ids = self.model.encode(self.prompt).squeeze().tolist()
 #         for index, key in enumerate(self.param_keys):
 #             if index == 0:
@@ -80,7 +80,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
     vocab_size = len(
         model.get_logits_from_input_ids([0])
     )
-
+    # INTEGER TO ADD
     if param_type == "number":
         allowed_chars = set("0123456789.-,}")
 
