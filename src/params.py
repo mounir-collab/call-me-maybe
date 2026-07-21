@@ -82,7 +82,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
     )
     # INTEGER TO ADD
     if param_type == "number":
-        allowed_chars = set("0123456789.-,}")
+        allowed_chars = set("-0123456.789,}")
 
         for token_id in range(vocab_size):
             text = model.decode([token_id])
