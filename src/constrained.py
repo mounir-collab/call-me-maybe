@@ -41,11 +41,11 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
 
     get_params(res , model , system_prompt_ids , fn_def)
 
-    # var3 : str = "\n}"
+    var3 : str = "\n}"
 
-    # var3_ids : list[int] = model.encode(var3)
+    var3_ids : list[int] = model.encode(var3)[0].tolist()
 
-    # res.append(var3_ids)
+    res.append(var3_ids)
     # exit(0)
     # print(model.decode(res))
     # print("".join(item) )
