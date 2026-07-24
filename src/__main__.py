@@ -88,9 +88,11 @@ def main() -> None:
     # print(build_system_prompt(model , functions))
 
     system_prompt_ids = build_system_prompt(model , functions)
-    print(model.decode(system_prompt_ids))
-    exit(0)
-    # system_prompt_ids = []
+    # system_prompt = build_system_prompt(functions)
+    # system_prompt_ids = model.encode(system_prompt)[0].tolist()
+    # print(model.decode(system_prompt_ids))
+    # exit(0)
+    system_prompt_ids = []
     # print(type(functions), type(functions[0]))
     # lst_fn_names : list[str] = [f.name for f in functions] + ["ft_none"]
     # lst_fn_names_ids : list[int]= [model.encode(fn.name)[0].tolist() for fn in functions]
@@ -109,10 +111,12 @@ def main() -> None:
         # )
         res: str = constrained_decoding(prompt, model, system_prompt_ids, lst_fn_names_ids, functions)
         print(res)
+        print()
         # output.append(res)
         # input_ids , lst_fn_names , lst_ids_fn , Functions definitions , prompt 
     end = time.time()
     print("the time is : " , end - start)
+    print("time in min is : " , (end - start) / 60)
     # except Exception as e:
     #     print(e)
 

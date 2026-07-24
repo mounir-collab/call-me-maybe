@@ -89,6 +89,14 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
 
             if text and all(c in allowed_chars for c in text):
                 allowed.append(token_id)
+    if param_type == "integer":
+        allowed_chars = set("0123456789},")
+
+        for token_id in range(vocab_size):
+            text = model.decode([token_id])
+
+            if text and all(c in allowed_chars for c in text):
+                allowed.append(token_id)
 
     elif param_type == "string":
 
@@ -97,7 +105,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
 
             if (
                 text
-                and '"' not in text
+                # and '"' not in text
                 and '\n' not in text
             ):
                 allowed.append(token_id)
@@ -117,20 +125,124 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
 
     return allowed
 
+def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def , function):
+    allowed_tokens = get_allowed_tokens(
+            model,
+            param_def.type
+        )
+    
+    float_tokens = []
+    number = ""
+    while True:
+
+            logits = model.get_logits_from_input_ids(
+                system_prompt_ids
+            )
+            
+            next_token = max(
+                allowed_tokens,
+                key=lambda token: logits[token]
+            )
+            print(model.decode(next_token))
+            if model.decode(next_token) == " //":
+                break
+            decoded = model.decode([next_token])
+            if "," in decoded or "}" in decoded:
+                break
+            float_tokens.append(next_token)
+            system_prompt_ids.append(next_token)
+    float_str = model.decode(float_tokens)
+    normalized_ids = model.encode(float_str)
+
+    if param_def.type in ("number" , "float"):
+        number = str(float(float_str))
+        normalized_ids = model.encode(number)[0]
+        return normalized_ids
+    return normalized_ids
+    
+
+# def get_integer_param(model , system_prompt_ids , param_def , function):
+#     allowed_tokens = get_allowed_tokens(
+#             model,
+#             param_def.type
+#         )
+    
+#     float_tokens = []
+#     while True:
+
+#             logits = model.get_logits_from_input_ids(
+#                 system_prompt_ids
+#             )
+            
+#             next_token = max(
+#                 allowed_tokens,
+#                 key=lambda token: logits[token]
+#             )
+#             print(model.decode(next_token))
+#             if model.decode(next_token) == " //":
+#                 break
+#             decoded = model.decode([next_token])
+#             if "," in decoded or "}" in decoded:
+#                 break
+#             float_tokens.append(next_token)
+#             system_prompt_ids.append(next_token)
+
+#     float_str = model.decode(float_tokens)
+#     number = str(float(float_str))
+#     normalized_ids = model.encode(number)[0]
+
+#     return normalized_ids
+    
+# def get_bool_param(model , system_prompt_ids , param_def , function):
+#     allowed_tokens = get_allowed_tokens(
+#             model,
+#             param_def.type
+#         )
+    
+#     # float_tokens = []
+#     while True:
+
+#             logits = model.get_logits_from_input_ids(
+#                 system_prompt_ids
+#             )
+            
+#             next_token = max(
+#                 allowed_tokens,
+#                 key=lambda token: logits[token]
+#             )
+#             print(model.decode(next_token))
+#             if model.decode(next_token) == " //":
+#                 break
+#             decoded = model.decode([next_token])
+#             if "," in decoded or "}" in decoded:
+#                 break
+#             float_tokens.append(next_token)
+#             system_prompt_ids.append(next_token)
+
+#     float_str = model.decode(float_tokens)
+#     number = str(float(float_str))
+#     normalized_ids = model.encode(number)[0]
+
+#     return normalized_ids
+
 def get_params(
     res: list[int],
     model: Small_LLM_Model,
     system_prompt_ids: list[int],
     function: FunctionDefinition,
-):
+):  
     for index, (param_name, param_def) in enumerate(
         function.parameters.items()
     ):
-
+        mumber_tokens = []
         if index == 0:
-            prefix = f'"{param_name}":'
+            prefix = '\n   "'+ f'{param_name}": '
+            if param_def.type == "string":
+                prefix = '\n   "'+ f'{param_name}": "'
         else:
-            prefix = f',"{param_name}":'
+            prefix = f',' + "\n   " + f'"{param_name}": '
+            if param_def.type == "string":
+                prefix = f',' + "\n   " + f'"{param_name}": "'
 
         prefix_ids = model.encode(
             prefix
@@ -139,31 +251,54 @@ def get_params(
         res.extend(prefix_ids)
         system_prompt_ids.extend(prefix_ids)
 
-        allowed_tokens = get_allowed_tokens(
-            model,
-            param_def.type
-        )
+        # allowed_tokens = get_allowed_tokens(
+        #     model,
+        #     param_def.type
+        # )
 
-        while True:
+        # while True:
 
-            logits = model.get_logits_from_input_ids(
-                system_prompt_ids
-            )
+        #     logits = model.get_logits_from_input_ids(
+        #         system_prompt_ids
+        #     )
+            
 
-            next_token = max(
-                allowed_tokens,
-                key=lambda token: logits[token]
-            )
+        #     next_token = max(
+        #         allowed_tokens,
+        #         key=lambda token: logits[token]
+        #     )
+        #     print(model.decode(next_token))
+        #     # if any(c in model.decode(next_token) for c in ['/', '#' , '`']) :
+        #     #     break
+        #     if model.decode(next_token) == " //":
+        #         break
+        #     decoded = model.decode([next_token])
+        #     # if decoded == "'" and param_def.type == "string":
+        #     #     next_token = model.encode('"')[0].tolist()
+        #     #     system_prompt_ids.extend(next_token)
+        #     #     res.extend(next_token)
+        #     #     continue
+        #     if "," in decoded or "}" in decoded:
 
-            decoded = model.decode([next_token])
+        #         if param_def.type == "string" and "," in decoded :
+        #             system_prompt_ids.append(model.encode('"')[0])
+        #             res.append(model.encode('"')[0])
+        #         break
+            
+        #     system_prompt_ids.append(next_token)
+        #     res.append(next_token)
 
-            if "," in decoded or "}" in decoded:
+        if param_def.type == "number":
+            my_result = get_number_param(model , system_prompt_ids , param_def , function)
+            res.extend(my_result)
+        
+        elif param_def.type == "integer" :
+            my_result = get_number_param(model , system_prompt_ids , param_def , function)
+            res.extend(my_result)
 
-                if decoded == "}":
-                    system_prompt_ids.append(next_token)
-                    res.append(next_token)
+        elif param_def.type == "boolean":
+            pass
+        elif param_def.type == "string" :
+            pass
 
-                break
-
-            system_prompt_ids.append(next_token)
-            res.append(next_token)
+    

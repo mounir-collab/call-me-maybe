@@ -8,7 +8,8 @@
 # ) -> list[int]:
 #     prompt_parts = [
 #         "You can call the following functions.",
-#         "When a function is needed, respond with a JSON object in this format:",
+#         "When a function is needed, respond with a JSON object in this format:"
+#         "ALSO YOU SHOULD NOT GENERATE COMMENTS FROM YOU LIKE : '//' " ,
 #         """
 # {
 #     "prompt": "<user request>",
@@ -101,3 +102,40 @@ Examples:
 """.strip()
 
     return model.encode(system_prompt)[0].tolist()
+
+
+# def build_system_prompt(functions: list[FunctionDefinition]) -> str:
+#     """
+#     This function build the starting prompt to tell the AI model
+#     what to do, with strict and critical rules to follow
+
+#     Args:
+#         functions (List[Function_Definition]): a list of all the functions
+#         in the functions_definitions file with all their details
+
+#     Returns:
+#         str: Returns the full prompt string
+#     """
+
+#     lines = [
+#         "<|im_start|>system\n",
+#         "You are a strict JSON function-calling API.",
+#         "Your ONLY task is to map the user prompt to a function.",
+#         "CRITICAL: You MUST use the EXACT parameter names ",
+#         "defined in the functions.",
+#         "NEVER invent or guess parameter names. For example, ",
+#         "use 'b', do not use 'number'.",
+#         "<|im_end|>",
+#         "",
+#         "<|im_start|>user"
+#         "Available functions:"
+#     ]
+#     for fn in functions:
+#         params = ", ".join(f'"{name}": "{item.type}"' for name, item in
+#                            fn.parameters.items())
+#         lines.append(f" - {fn.name}: requires parameters "
+#                      f"{{{params}}}: {fn.description}")
+
+#     lines.append('\nOutput EXACTLY this format: {"name": "func_name", '
+#                  '"parameters": {"arg1": "val1"}}')
+#     return "\n".join(lines)

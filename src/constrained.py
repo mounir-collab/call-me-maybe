@@ -22,7 +22,7 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
     # print(res)
     fn_name = get_fn_name(res , model , system_prompt_ids , lst_fn_names_ids , lst_fn)
     fn_def : FunctionDefinition = [fn for fn in lst_fn if fn.name == fn_name][0]
-    # print(fn_def.name)
+    print(fn_def.name)
     # exit(0)
     # print(res)
     # print(name)
@@ -41,10 +41,15 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
 
     get_params(res , model , system_prompt_ids , fn_def)
 
+    brace_ids = model.encode("\n  }")[0]
+    system_prompt_ids.extend(model.encode("\n  }")[0])
+    res.append(model.encode("\n  }")[0])
+
     var3 : str = "\n}"
 
     var3_ids : list[int] = model.encode(var3)[0].tolist()
 
+    system_prompt_ids.extend(var3_ids)
     res.append(var3_ids)
     # exit(0)
     # print(model.decode(res))

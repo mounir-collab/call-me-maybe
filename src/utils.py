@@ -26,7 +26,7 @@ def get_fn_name(
     # print(model.decode(res)[0])
     # exit(0)
 
-    for index in range(20):
+    for index in range(30):
 
         logits = model.get_logits_from_input_ids(
             system_prompt_ids

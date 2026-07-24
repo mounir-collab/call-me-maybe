@@ -33,7 +33,7 @@ def load_func_def(path : str) -> list[FunctionDefinition]:
             "returns" : {
                     "type" : "None"}
                 })
-        return [FunctionDefinition(**item) for item in content ] + [ft_none]
+        return [FunctionDefinition(**item) for item in content ]
     except ValidationError as e:
         raise InputFileError(f"Invalid function definition schema in {path}: {e}") from e
     except Exception as e :
