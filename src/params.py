@@ -125,7 +125,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
 
     return allowed
 
-def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def , function):
+def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def):
     allowed_tokens = get_allowed_tokens(
             model,
             param_def.type
@@ -159,47 +159,16 @@ def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def , fu
         normalized_ids = model.encode(number)[0]
         return normalized_ids
     return normalized_ids
+
+    
     
 
-# def get_integer_param(model , system_prompt_ids , param_def , function):
-#     allowed_tokens = get_allowed_tokens(
-#             model,
-#             param_def.type
-#         )
-    
-#     float_tokens = []
-#     while True:
-
-#             logits = model.get_logits_from_input_ids(
-#                 system_prompt_ids
-#             )
-            
-#             next_token = max(
-#                 allowed_tokens,
-#                 key=lambda token: logits[token]
-#             )
-#             print(model.decode(next_token))
-#             if model.decode(next_token) == " //":
-#                 break
-#             decoded = model.decode([next_token])
-#             if "," in decoded or "}" in decoded:
-#                 break
-#             float_tokens.append(next_token)
-#             system_prompt_ids.append(next_token)
-
-#     float_str = model.decode(float_tokens)
-#     number = str(float(float_str))
-#     normalized_ids = model.encode(number)[0]
-
-#     return normalized_ids
-    
 # def get_bool_param(model , system_prompt_ids , param_def , function):
 #     allowed_tokens = get_allowed_tokens(
 #             model,
 #             param_def.type
 #         )
     
-#     # float_tokens = []
 #     while True:
 
 #             logits = model.get_logits_from_input_ids(
@@ -216,14 +185,42 @@ def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def , fu
 #             decoded = model.decode([next_token])
 #             if "," in decoded or "}" in decoded:
 #                 break
-#             float_tokens.append(next_token)
-#             system_prompt_ids.append(next_token)
 
-#     float_str = model.decode(float_tokens)
+
 #     number = str(float(float_str))
 #     normalized_ids = model.encode(number)[0]
 
 #     return normalized_ids
+
+def get_str_parm(model : Small_LLM_Model, system_prompt_ids , param_def):
+
+    allowed_tokens = get_allowed_tokens(model , param_def.type) 
+    str_ids = []
+
+    max_tokens = 100
+    for _ in range(max_tokens):
+
+        logits = model.get_logits_from_input_ids(system_prompt_ids)
+        next_token = max(allowed_tokens , 
+                         key=lambda token: logits[token]
+                         )
+
+        decoded = model.decode([next_token])
+        print(decoded)
+        if decoded == '"':
+            break
+        if decoded == "\\":
+            break
+        system_prompt_ids.append(next_token)
+        str_ids.append(next_token)
+
+    quote_ids = model.encode('"')[0].tolist()
+
+    str_ids.extend(quote_ids)
+    system_prompt_ids.extend(quote_ids)
+    return str_ids
+
+
 
 def get_params(
     res: list[int],
@@ -289,16 +286,18 @@ def get_params(
         #     res.append(next_token)
 
         if param_def.type == "number":
-            my_result = get_number_param(model , system_prompt_ids , param_def , function)
+            my_result = get_number_param(model , system_prompt_ids , param_def)
             res.extend(my_result)
         
         elif param_def.type == "integer" :
-            my_result = get_number_param(model , system_prompt_ids , param_def , function)
+            my_result = get_number_param(model , system_prompt_ids , param_def)
             res.extend(my_result)
 
         elif param_def.type == "boolean":
             pass
         elif param_def.type == "string" :
-            pass
+            my_result = get_str_parm(model , system_prompt_ids , param_def)
+            res.append(my_result)
+        
 
     
