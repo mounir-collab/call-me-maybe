@@ -92,7 +92,7 @@ def main() -> None:
     # system_prompt_ids = model.encode(system_prompt)[0].tolist()
     # print(model.decode(system_prompt_ids))
     # exit(0)
-    system_prompt_ids = []
+    # system_prompt_ids = []
     # print(type(functions), type(functions[0]))
     # lst_fn_names : list[str] = [f.name for f in functions] + ["ft_none"]
     # lst_fn_names_ids : list[int]= [model.encode(fn.name)[0].tolist() for fn in functions]

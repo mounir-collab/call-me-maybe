@@ -192,34 +192,54 @@ def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def):
 
 #     return normalized_ids
 
-def get_str_parm(model : Small_LLM_Model, system_prompt_ids , param_def):
+def get_str_param(
+    model: Small_LLM_Model,
+    system_prompt_ids: list[int],
+    param_def,
+) -> list[int]:
 
-    allowed_tokens = get_allowed_tokens(model , param_def.type) 
-    str_ids = []
+    allowed_tokens = get_allowed_tokens(model, param_def.type)
 
-    max_tokens = 100
-    for _ in range(max_tokens):
+    result = []
+
+    MAX_TOKENS = 100
+
+    for _ in range(MAX_TOKENS):
 
         logits = model.get_logits_from_input_ids(system_prompt_ids)
-        next_token = max(allowed_tokens , 
-                         key=lambda token: logits[token]
-                         )
+
+        next_token = max(
+            allowed_tokens,
+            key=lambda t: logits[t]
+        )
 
         decoded = model.decode([next_token])
         print(decoded)
-        if decoded == '"':
+        # Did we reach the closing quote?
+        if '"' in decoded:
+
+            before = decoded.split('"')[0]
+
+            if before:
+                ids = model.encode(before)[0].tolist()
+                result.extend(ids)
+                system_prompt_ids.extend(ids)
+
             break
-        if decoded == "\\":
-            break
+
+        result.append(next_token)
         system_prompt_ids.append(next_token)
-        str_ids.append(next_token)
 
-    quote_ids = model.encode('"')[0].tolist()
+    else:
+        raise RuntimeError("String decoding exceeded limit.")
 
-    str_ids.extend(quote_ids)
-    system_prompt_ids.extend(quote_ids)
-    return str_ids
+    # Close the string ourselves.
+    quote = model.encode('"')[0].tolist()
 
+    result.extend(quote)
+    system_prompt_ids.extend(quote)
+
+    return result
 
 
 def get_params(
@@ -296,8 +316,6 @@ def get_params(
         elif param_def.type == "boolean":
             pass
         elif param_def.type == "string" :
-            my_result = get_str_parm(model , system_prompt_ids , param_def)
-            res.append(my_result)
+            my_result = get_str_param(model , system_prompt_ids , param_def)
+            res.extend(my_result)
         
-
-    
