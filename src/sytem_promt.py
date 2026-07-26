@@ -1,46 +1,101 @@
-from typing import List
+# from typing import List
 
-from .models import FunctionDefinition
+# from .models import FunctionDefinition
 
-def build_system_prompt(
-    model,
-    lst_functions: list[FunctionDefinition]
-) -> list[int]:
-    prompt_parts = [
-        "You can call the following functions.",
-        "When a function is needed, respond with a JSON object in this format:"
-        "ALSO YOU SHOULD NOT GENERATE COMMENTS FROM YOU LIKE : '//' " ,
-        """
-{
-    "prompt": "<user request>",
-    "name": "<function name>",
-    "parameters": {
-        ...
-    }
-}
-""",
-        "",
-        "Available functions:"
-    ]
+# def build_system_prompt(
+#     model,
+#     lst_functions: list[FunctionDefinition]
+# ) -> list[int]:
+#     prompt_parts = [
+#         "You can call the following functions.",
+#         "When a function is needed, respond with a JSON object in this format:"
+#         "ALSO YOU SHOULD NOT GENERATE COMMENTS FROM YOU LIKE : '//' " ,
+#         """
+# {
+#     "prompt": "<user request>",
+#     "name": "<function name>",
+#     "parameters": {
+#         ...
+#     }
+# }
+# """,
+#         "",
+#         "Available functions:"
+#     ]
 
-    for func in lst_functions:
-        prompt_parts.append(f"\nFunction: {func.name}")
-        prompt_parts.append(f"Description: {func.description}")
+#     for func in lst_functions:
+#         prompt_parts.append(f"\nFunction: {func.name}")
+#         prompt_parts.append(f"Description: {func.description}")
 
-        if func.parameters:
-            prompt_parts.append("Parameters:")
-            for name, param in func.parameters.items():
-                prompt_parts.append(
-                    f"  - {name}: {param}"
-                )
+#         if func.parameters:
+#             prompt_parts.append("Parameters:")
+#             for name, param in func.parameters.items():
+#                 prompt_parts.append(
+#                     f"  - {name}: {param}"
+#                 )
 
-        prompt_parts.append(f"Returns: {func.returns}")
+#         prompt_parts.append(f"Returns: {func.returns}")
 
-    system_prompt = "\n".join(prompt_parts)
+#     system_prompt = "\n".join(prompt_parts)
 
-    # Adjust depending on your tokenizer API
-    return model.encode(system_prompt)[0].tolist()
-    # return system_prompt
+#     # Adjust depending on your tokenizer API
+#     return model.encode(system_prompt)[0].tolist()
+#     # return system_prompt
+
+# from llm_sdk import Small_LLM_Model
+# from .models import FunctionDefinition
+
+
+# def build_system_prompt(
+#     model: Small_LLM_Model,
+#     lst_functions: list[FunctionDefinition]
+# ) -> list[int]:
+
+#     functions_desc = []
+
+#     for fn in lst_functions:
+#         params = ", ".join(
+#             f"{name}:{param.type}"
+#             for name, param in fn.parameters.items()
+#         )
+
+#         functions_desc.append(
+#             f"{fn.name}({params}) -> {fn.returns.type}"
+#         )
+
+#     system_prompt = f"""
+# Role:
+# You are a function-calling AI.
+
+# Task:
+# Select the best function and extract its parameters from the user prompt.
+
+# Constraints:
+# - Use only the available functions.
+# - Do not invent parameters.
+# - Extract parameter values from the prompt.
+# - Return exactly one function call.
+
+# Format:
+# {{
+# "prompt":"<user prompt>",
+# "name":"<function name>",
+# "parameters":{{...}}
+# }}
+
+# Available functions:
+# {chr(10).join(functions_desc)}
+
+# Examples:
+
+# {{
+# "prompt":"Reverse the string 'hello'",
+# "name":"fn_reverse_string",
+# "parameters":{{"s":'hello'}}
+# }}
+# """.strip()
+
+#     return model.encode(system_prompt)[0].tolist()
 
 from llm_sdk import Small_LLM_Model
 from .models import FunctionDefinition
@@ -51,52 +106,51 @@ def build_system_prompt(
     lst_functions: list[FunctionDefinition]
 ) -> list[int]:
 
-    functions_desc = []
+    prompt = []
+
+    prompt.append("You are a function calling assistant.")
+    prompt.append("Choose exactly one function.")
+    prompt.append("Extract every parameter exactly from the user prompt.")
+    prompt.append("Never invent functions or parameters.")
+    prompt.append("Copy strings exactly.")
+    prompt.append("Keep file paths, SQL queries, regexes and templates unchanged.")
+    prompt.append("Return only a JSON object.")
+    prompt.append("")
+    prompt.append("Available functions:")
 
     for fn in lst_functions:
+
         params = ", ".join(
             f"{name}:{param.type}"
             for name, param in fn.parameters.items()
         )
 
-        functions_desc.append(
-            f"{fn.name}({params}) -> {fn.returns.type}"
+        prompt.append(
+            f"- {fn.name}({params})"
         )
 
-    system_prompt = f"""
-Role:
-You are a function-calling AI.
+        if fn.description:
+            prompt.append(
+                f"  Description: {fn.description}"
+            )
 
-Task:
-Select the best function and extract its parameters from the user prompt.
+    prompt.append("")
+    prompt.append("Example:")
+    prompt.append(
+"""
+{
+    "prompt": "Reverse the string 'hello'",
+    "name": "fn_reverse_string",
+    "parameters": {
+        "s": "hello"
+    }
+}
+"""
+    )
 
-Constraints:
-- Use only the available functions.
-- Do not invent parameters.
-- Extract parameter values from the prompt.
-- Return exactly one function call.
-
-Format:
-{{
-"prompt":"<user prompt>",
-"name":"<function name>",
-"parameters":{{...}}
-}}
-
-Available functions:
-{chr(10).join(functions_desc)}
-
-Examples:
-
-{{
-"prompt":"Reverse the string 'hello'",
-"name":"fn_reverse_string",
-"parameters":{{"s":'hello'}}
-}}
-""".strip()
+    system_prompt = "\n".join(prompt)
 
     return model.encode(system_prompt)[0].tolist()
-
 
 # def build_system_prompt(functions: list[FunctionDefinition]) -> str:
 #     """

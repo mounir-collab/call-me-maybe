@@ -133,8 +133,10 @@ def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def):
     
     float_tokens = []
     number = ""
+    max_tokens = 0
     while True:
-
+            if (max_tokens == 32):
+                break
             logits = model.get_logits_from_input_ids(
                 system_prompt_ids
             )
@@ -143,6 +145,7 @@ def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def):
                 allowed_tokens,
                 key=lambda token: logits[token]
             )
+            max_tokens+=1
             print(model.decode(next_token))
             # if model.decode(next_token) == " //":
             #     break
