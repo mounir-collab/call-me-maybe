@@ -46,7 +46,7 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
 
     get_params(res , model , system_prompt_ids , fn_def)
 
-    brace_ids = model.encode("\n  }")[0]
+    brace_ids = model.encode("\n  }")[0].tolist()
     system_prompt_ids.extend(model.encode("\n  }")[0])
     res.extend(model.encode("\n  }")[0])
 

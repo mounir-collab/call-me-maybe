@@ -144,19 +144,19 @@ def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def):
                 key=lambda token: logits[token]
             )
             print(model.decode(next_token))
-            if model.decode(next_token) == " //":
-                break
+            # if model.decode(next_token) == " //":
+            #     break
             decoded = model.decode([next_token])
             if "," in decoded or "}" in decoded:
                 break
             float_tokens.append(next_token)
             system_prompt_ids.append(next_token)
     float_str = model.decode(float_tokens)
-    normalized_ids = model.encode(float_str)
+    normalized_ids = model.encode(float_str)[0].tolist()
 
     if param_def.type in ("number" , "float"):
         number = str(float(float_str))
-        normalized_ids = model.encode(number)[0]
+        normalized_ids = model.encode(number)[0].tolist()
         return normalized_ids
     return normalized_ids
 
