@@ -102,16 +102,26 @@ def main() -> None:
     # print(lst_fn_names_ids)
     
     # print(prompts)
-
-    for prompt in prompts :
-        # user_prompt_ids = model.encode(prompt)[0].tolist()
-        # input_ids = (
-        #     system_prompt_ids +
-        #     user_prompt_ids
-        # )
-        res: str = constrained_decoding(prompt, model, system_prompt_ids, lst_fn_names_ids, functions)
-        print(res)
-        print()
+    os.makedirs(os.path.dirname(ob_args.output), exist_ok=True)
+    with open(ob_args.output , 'w') as f :
+        f.write("[\n")
+        f.flush()
+        for i , prompt in enumerate(prompts) :
+            # user_prompt_ids = model.encode(prompt)[0].tolist()
+            # input_ids = (
+            #     system_prompt_ids +
+            #     user_prompt_ids
+            # )
+            res: str = constrained_decoding(prompt, model, system_prompt_ids, lst_fn_names_ids, functions)
+            print(res)
+            ob = json.loads(res)
+            json.dump(ob ,f , indent=2)
+            f.flush()
+            if i < len(prompts) - 1:
+                f.write(",\n")
+            f.flush()
+            print()
+        f.write("\n]")
         # output.append(res)
         # input_ids , lst_fn_names , lst_ids_fn , Functions definitions , prompt 
     end = time.time()

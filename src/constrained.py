@@ -2,6 +2,7 @@ from llm_sdk import Small_LLM_Model
 from .utils import get_fn_name
 from .models import TestPrompt , FunctionDefinition
 from .params import get_params
+import json
 # def get_fn_name(res , model , system_prompt_ids , lst_fn_names_ids , lst_fn_names):
 #     pass
 
@@ -11,11 +12,15 @@ from .params import get_params
 
 def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_prompt_ids, lst_fn_names_ids, lst_fn):
     res : list[int] = []
-    
-    var1 = '{' + f'\n "prompt": "{prompt.prompt}",\n "name": "'
+    escaped_prompt = json.dumps(prompt.prompt)
+    var1 = (
+        "{"
+        f'\n "prompt": {escaped_prompt},'
+        '\n "name": "'
+    )
     # print(var1)
     var1_ids = model.encode(var1)[0].tolist()
-    res.append(var1_ids)
+    res.extend(var1_ids)
     system_prompt_ids.extend(var1_ids)
 
 
@@ -35,7 +40,7 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
     var2 : str =  f'",\n "parameters": ' + '{'
     var2_ids = model.encode(var2)[0].tolist()
 
-    res.append(var2_ids)
+    res.extend(var2_ids)
     system_prompt_ids.extend(var2_ids)
 
 
@@ -43,14 +48,14 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
 
     brace_ids = model.encode("\n  }")[0]
     system_prompt_ids.extend(model.encode("\n  }")[0])
-    res.append(model.encode("\n  }")[0])
+    res.extend(model.encode("\n  }")[0])
 
     var3 : str = "\n}"
 
     var3_ids : list[int] = model.encode(var3)[0].tolist()
 
     system_prompt_ids.extend(var3_ids)
-    res.append(var3_ids)
+    res.extend(var3_ids)
     # exit(0)
     # print(model.decode(res))
     # print("".join(item) )

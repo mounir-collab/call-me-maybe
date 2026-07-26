@@ -219,7 +219,6 @@ def get_str_param(
         if '"' in decoded:
 
             before = decoded.split('"')[0]
-
             if before:
                 ids = model.encode(before)[0].tolist()
                 result.extend(ids)
