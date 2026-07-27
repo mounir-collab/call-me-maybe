@@ -125,7 +125,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
 
     return allowed
 
-def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def):
+def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def ):
     allowed_tokens = get_allowed_tokens(
             model,
             param_def.type
@@ -146,7 +146,7 @@ def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def):
                 key=lambda token: logits[token]
             )
             max_tokens+=1
-            print(model.decode(next_token))
+            # print(model.decode(next_token))
             # if model.decode(next_token) == " //":
             #     break
             decoded = model.decode([next_token])
@@ -154,6 +154,7 @@ def get_number_param(model : Small_LLM_Model, system_prompt_ids , param_def):
                 break
             float_tokens.append(next_token)
             system_prompt_ids.append(next_token)
+            # context.refresh(res)
     float_str = model.decode(float_tokens)
     normalized_ids = model.encode(float_str)[0].tolist()
 
@@ -217,7 +218,7 @@ def get_str_param(
         )
 
         decoded = model.decode([next_token])
-        print(decoded)
+        # print(decoded)
         # Did we reach the closing quote?
         if '"' in decoded:
 
@@ -249,6 +250,7 @@ def get_params(
     model: Small_LLM_Model,
     system_prompt_ids: list[int],
     function: FunctionDefinition,
+    context
 ):  
     for index, (param_name, param_def) in enumerate(
         function.parameters.items()
@@ -310,14 +312,17 @@ def get_params(
         if param_def.type == "number":
             my_result = get_number_param(model , system_prompt_ids , param_def)
             res.extend(my_result)
+            context.refresh(res)
         
         elif param_def.type == "integer" :
             my_result = get_number_param(model , system_prompt_ids , param_def)
             res.extend(my_result)
+            context.refresh(res)
 
         elif param_def.type == "boolean":
             pass
         elif param_def.type == "string" :
             my_result = get_str_param(model , system_prompt_ids , param_def)
             res.extend(my_result)
+            context.refresh(res)
         

@@ -19,7 +19,8 @@ def get_fn_name(
     model,
     system_prompt_ids,
     lst_fn_names_ids,
-    lst_fn
+    lst_fn,
+    context
 ) -> str:
     fn_name = ""
 
@@ -50,6 +51,7 @@ def get_fn_name(
 
         res.append(next_token)
         # print(model.decode(next_token))
+        context.refresh(res)
         system_prompt_ids.append(next_token)
 
         # print(fn_name)
@@ -66,24 +68,24 @@ def get_fn_name(
     return fn_name
 
 # res
-def get_params(function : FunctionDefinition , model : Small_LLM_Model ):
+# def get_params(function : FunctionDefinition , model : Small_LLM_Model ):
     
-    res : list[int] = []
+#     res : list[int] = []
 
-    var1 : str =  '"parameters": {'
-    var1_ids = model.encode(var1)[0].tolist()
+#     var1 : str =  '"parameters": {'
+#     var1_ids = model.encode(var1)[0].tolist()
 
-    fn_name = function.name
+#     fn_name = function.name
     
-    for param_name , param_type in function.parameters.items() :
+#     for param_name , param_type in function.parameters.items() :
         
-        if param_type.type == "integer":
-            pass
-        elif param_type.type == "float":
-            pass
-        elif param_type.type == "number":
-            pass
-        elif param_type.type == "string":
-            pass
-        elif param_type.type == "boolean":
-            pass
+#         if param_type.type == "integer":
+#             pass
+#         elif param_type.type == "float":
+#             pass
+#         elif param_type.type == "number":
+#             pass
+#         elif param_type.type == "string":
+#             pass
+#         elif param_type.type == "boolean":
+#             pass

@@ -1,6 +1,9 @@
 import os
 from dotenv import load_dotenv
-
+from rich.console import Console
+from rich.live import Live
+from rich.panel import Panel
+from .ui import DecoderUI
 
 import argparse
 # from pathlib import Path
@@ -111,6 +114,9 @@ def main() -> None:
     # print(prompts)
     os.makedirs(os.path.dirname(ob_args.output), exist_ok=True)
     print("\n🚀 Starting constrained decoding...\n")
+    ui = DecoderUI()
+    console = Console()
+
     with open(ob_args.output , 'w') as f :
         f.write("[\n")
         f.flush()
@@ -120,8 +126,27 @@ def main() -> None:
             #     system_prompt_ids +
             #     user_prompt_ids
             # )
-            res: str = constrained_decoding(prompt, model, system_prompt_ids, lst_fn_names_ids, functions)
-            print(res)
+            # res: str = constrained_decoding(prompt, model, system_prompt_ids, lst_fn_names_ids, functions)
+            # print(res)
+            # console.clear()
+            # ui.reset()                 # clear previous JSON
+            ui.set_prompt(prompt.prompt)
+
+            with Live(
+                ui.render(),
+                refresh_per_second=1,
+                transient=True,
+            ) as live:
+
+                res = constrained_decoding(
+                    prompt,
+                    model,
+                    system_prompt_ids,
+                    lst_fn_names_ids,
+                    functions,
+                    ui,
+                    live,
+                )
             ob = json.loads(res)
             json.dump(ob ,f , indent=2)
             f.flush()
@@ -133,8 +158,22 @@ def main() -> None:
         # output.append(res)
         # input_ids , lst_fn_names , lst_ids_fn , Functions definitions , prompt 
     end = time.time()
-    print("the time is : " , end - start)
-    print("time in min is : " , (end - start) / 60)
+    # print("the time is : " , end - start)
+    # print("time in min is : " , (end - start) / 60)
+    elapsed = end - start
+
+    console.print(
+    Panel(
+        f"""[bold green]✔ Finished[/]
+
+        🕒 Execution Time : [cyan]{elapsed:.3f} seconds[/]
+        🕒 Minutes       : [yellow]{elapsed / 60:.3f} min[/]
+        """,
+        title="Statistics",
+        border_style="green",
+        expand=False,
+        )
+    )
     # except Exception as e:
     #     print(e)
 
