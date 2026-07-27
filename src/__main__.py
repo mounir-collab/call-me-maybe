@@ -51,6 +51,7 @@ def parse_args() -> argparse.Namespace:
 import json
 
 def main() -> None:
+    print("⚙️  Initializing Call Me Maybe...\n")
     start = time.time()
     ob_args = parse_args()
     # print(ob_args.__dict__)
@@ -58,8 +59,12 @@ def main() -> None:
     output : list [str] = []
 
     # try :
+    print("📂 Loading function definitions...")
     functions : list[FunctionDefinition] = load_func_def("data/input/functions_definition.json")
+    print(f"✔️  {len(functions)} function definitions loaded.")
+    print("📝 Loading test prompts...")
     prompts = load_test_promts("data/input/function_calling_tests.json")
+    print(f"✔️  {len(prompts)} prompts loaded.")
 
     # fn = functions[0]
 
@@ -74,7 +79,9 @@ def main() -> None:
     # print(functions)
     # print(function)
     # print(sys.path[0])
+    print("🧠 Loading language model...")
     model  = Small_LLM_Model()
+    print("✔️  Language model ready.")
     # print(model.get_path_to_vocab_file())
     # for function in functions :
     #     print(function)
@@ -103,6 +110,7 @@ def main() -> None:
     
     # print(prompts)
     os.makedirs(os.path.dirname(ob_args.output), exist_ok=True)
+    print("\n🚀 Starting constrained decoding...\n")
     with open(ob_args.output , 'w') as f :
         f.write("[\n")
         f.flush()

@@ -1,8 +1,5 @@
 [
   {
-    "prompt": ""
-  },
-  {
-    "prompt": "What is the sum of 265 and 345?"
+    "prompt": "greet add 2"
   }
 ]

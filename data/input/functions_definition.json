@@ -1,21 +1,6 @@
 [
   {
-    "name": "fn_multiply",
-    "description": "multiply tow numbers and return their product",
-    "parameters": {
-      "a": {
-        "type": "number"
-      },
-      "b": {
-        "type": "number"
-      }
-    },
-    "returns": {
-      "type": "number"
-    }
-  },
-  {
-    "name": "ln_add_numbers",
+    "name": "fn_add_numbers",
     "description": "Add two numbers together and return their sum.",
     "parameters": {
       "a": {

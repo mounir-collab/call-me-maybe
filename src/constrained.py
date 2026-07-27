@@ -25,7 +25,11 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
 
 
     # print(res)
+    lst_fn_names = [fn.name for fn in lst_fn]
     fn_name = get_fn_name(res , model , system_prompt_ids , lst_fn_names_ids , lst_fn)
+    print(fn_name)
+    if (not fn_name or not fn_name in lst_fn_names ):
+        pass
     fn_def : FunctionDefinition = [fn for fn in lst_fn if fn.name == fn_name][0]
     print(fn_def.name)
     # exit(0)
