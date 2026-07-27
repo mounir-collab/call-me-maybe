@@ -1,6 +1,6 @@
 from llm_sdk import Small_LLM_Model
 from src.models import FunctionDefinition
-
+import time
 
 # #  self.model = model
 # #         self.prompt = prompt
@@ -313,11 +313,14 @@ def get_params(
             my_result = get_number_param(model , system_prompt_ids , param_def)
             res.extend(my_result)
             context.refresh(res)
+            time.sleep(0.5)
         
         elif param_def.type == "integer" :
             my_result = get_number_param(model , system_prompt_ids , param_def)
             res.extend(my_result)
             context.refresh(res)
+            time.sleep(0.5)
+            
 
         elif param_def.type == "boolean":
             pass
@@ -325,4 +328,5 @@ def get_params(
             my_result = get_str_param(model , system_prompt_ids , param_def)
             res.extend(my_result)
             context.refresh(res)
+            time.sleep(0.5)
         

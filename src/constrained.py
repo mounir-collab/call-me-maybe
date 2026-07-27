@@ -4,7 +4,7 @@ from .models import TestPrompt , FunctionDefinition
 from .params import get_params
 import json
 from .ui import DecoderContext
-
+import time 
 def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_prompt_ids, lst_fn_names_ids, lst_fn , ui , live):
     res : list[int] = []
     
@@ -68,7 +68,7 @@ def constrained_decoding(prompt : TestPrompt , model : Small_LLM_Model , system_
     # exit(0)
 
     context.refresh(res)
-
+    time.sleep(1)
     return ("".join(model.decode(res)))
     # print(res)
     # print(model.decode(res))

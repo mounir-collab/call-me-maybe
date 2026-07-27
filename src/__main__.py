@@ -54,6 +54,7 @@ def parse_args() -> argparse.Namespace:
 import json
 
 def main() -> None:
+    os.system("clear")
     print("⚙️  Initializing Call Me Maybe...\n")
     start = time.time()
     ob_args = parse_args()
@@ -120,7 +121,6 @@ def main() -> None:
     with open(ob_args.output , 'w') as f :
         f.write("[\n")
         f.flush()
-        for i , prompt in enumerate(prompts) :
             # user_prompt_ids = model.encode(prompt)[0].tolist()
             # input_ids = (
             #     system_prompt_ids +
@@ -130,13 +130,17 @@ def main() -> None:
             # print(res)
             # console.clear()
             # ui.reset()                 # clear previous JSON
-            ui.set_prompt(prompt.prompt)
 
-            with Live(
-                ui.render(),
-                refresh_per_second=1,
-                transient=True,
-            ) as live:
+        with Live(
+            ui.render(),
+            refresh_per_second=30,
+            transient=True,
+        ) as live:
+
+            for i , prompt in enumerate(prompts) :
+                # ui.reset()                  # clear previous JSON
+                ui.set_prompt(prompt.prompt)
+                # live.update(ui.render())
 
                 res = constrained_decoding(
                     prompt,
@@ -147,16 +151,24 @@ def main() -> None:
                     ui,
                     live,
                 )
-            ob = json.loads(res)
-            json.dump(ob ,f , indent=2)
-            f.flush()
-            if i < len(prompts) - 1:
-                f.write(",\n")
-            f.flush()
-            print()
+                ob = json.loads(res)
+                json.dump(ob ,f , indent=2)
+                f.flush()
+                if i < len(prompts) - 1:
+                    f.write(",\n")
+                # if (i == len(prompts) - 1) :
+                #     ui.reset()
+                    # console.clear()
+                f.flush()
+            # print()
+            ui.reset()
+            live.update(ui.render(), refresh=True)
+            live.stop()
         f.write("\n]")
         # output.append(res)
-        # input_ids , lst_fn_names , lst_ids_fn , Functions definitions , prompt 
+        # input_ids , lst_fn_names , lst_ids_fn , Functions definitions , prompt
+    # ui.reset()                   # clear previous JSON
+    # console.clear()
     end = time.time()
     # print("the time is : " , end - start)
     # print("time in min is : " , (end - start) / 60)

@@ -1,9 +1,8 @@
-from rich.console import Console
+# from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
 
-console = Console()
 
 
 class DecoderUI:
@@ -14,7 +13,7 @@ class DecoderUI:
 
         self.layout.split_column(
             Layout(name="prompt", size=5),
-            Layout(name="json"),
+            Layout(name="json" , size = 12),
         )
 
         self.prompt = ""
@@ -46,10 +45,13 @@ class DecoderUI:
 
         return self.layout
     
+    def refresh(self, res):
+        self.ui.update_json(self.model.decode(res))
+        self.live.update(self.ui.render())
+
     def reset(self):
         self.prompt = ""
-        self.generated_json = ""
-
+        self.json = ""
 
 class DecoderContext:
 
