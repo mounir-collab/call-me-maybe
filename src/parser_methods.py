@@ -25,7 +25,9 @@ def load_func_def(path : str) -> list[FunctionDefinition]:
         ft_none = FunctionDefinition(**{
                 "name": "ft_none",
                 "description": "No available function matches the user request.",
-                "parameters": {},
+                "parameters": {
+                    
+                },
                 "returns": {
                 "type": "null"
                 }

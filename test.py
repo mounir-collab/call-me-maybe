@@ -2,7 +2,7 @@ from pydantic import BaseModel
 # from src.models import FunctionDefinition , ReturnFunc , FunctionParms
 # from llm_sdk import Small_LLM_Model 
 
-
+from rich.layout import Layout
 
 
 # my_dict = {
@@ -128,29 +128,29 @@ from pydantic import BaseModel
 # print(a + b)
 
 
-d = {
-    "name": "fn_add_numbers",
-    "description": "Add two numbers together and return their sum.",
-    "parameters": {
-      "a": {
-        "type": "number"
-      },
-      "b": {
-        "type": "number"
-      }
-    },
-    "returns": {
-      "type": "number"
-    }
-}
+# d = {
+#     "name": "fn_add_numbers",
+#     "description": "Add two numbers together and return their sum.",
+#     "parameters": {
+#       "a": {
+#         "type": "number"
+#       },
+#       "b": {
+#         "type": "number"
+#       }
+#     },
+#     "returns": {
+#       "type": "number"
+#     }
+# }
 
-print(d["parameters"].items())
-# for x_name , y_type in d["parameters"].items() :
-#     print(x_name)
-#     print(y_type)
+# print(d["parameters"].items())
+# # for x_name , y_type in d["parameters"].items() :
+# #     print(x_name)
+# #     print(y_type)
 
 
-for index , (param_name , param_def) in enumerate(d["parameters"].items() , 0) :
-    print(index)
-    print(param_name)
-    print(param_def)
+# for index , (param_name , param_def) in enumerate(d["parameters"].items() , 0) :
+#     print(index)
+#     print(param_name)
+#     print(param_def)

@@ -1,4 +1,3 @@
-# from rich.console import Console
 from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
@@ -45,9 +44,6 @@ class DecoderUI:
 
         return self.layout
     
-    def refresh(self, res):
-        self.ui.update_json(self.model.decode(res))
-        self.live.update(self.ui.render())
 
     def reset(self):
         self.prompt = ""
