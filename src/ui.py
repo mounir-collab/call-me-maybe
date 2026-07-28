@@ -2,6 +2,7 @@ from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
 from llm_sdk import Small_LLM_Model
+from rich.markup import escape
 
 
 class DecoderUI:
@@ -36,7 +37,7 @@ class DecoderUI:
 
         self.layout["json"].update(
             Panel(
-                self.json,
+                escape(self.json),
                 title="📄 Generated JSON",
                 border_style="green",
             )
@@ -45,8 +46,8 @@ class DecoderUI:
         return self.layout
 
     def reset(self) -> None:
-        self.prompt: str = ""
-        self.json: str = ""
+        self.prompt = ""
+        self.json = ""
 
 
 class DecoderContext:
@@ -57,6 +58,6 @@ class DecoderContext:
         self.ui: DecoderUI = ui
         self.live: Live = live
 
-    def refresh(self, res) -> None:
+    def refresh(self, res: list[int]) -> None:
         self.ui.update_json(self.model.decode(res))
         self.live.update(self.ui.render())

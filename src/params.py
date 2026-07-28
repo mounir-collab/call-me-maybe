@@ -11,18 +11,18 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
     vocab_size: int = len(model.get_logits_from_input_ids([0]))
     # INTEGER TO ADD
     if param_type == "number":
-        allowed_chars: set[str] = set("-0123456.789,}")
+        allowed_chars = set("-0123456.789,}")
 
         for token_id in range(vocab_size):
-            text: str = model.decode([token_id])
+            text = model.decode([token_id])
 
             if text and all(c in allowed_chars for c in text):
                 allowed.append(token_id)
     if param_type == "integer":
-        allowed_chars: set[str] = set("0123456789},")
+        allowed_chars = set("0123456789},")
 
         for token_id in range(vocab_size):
-            text: str = model.decode([token_id])
+            text = model.decode([token_id])
 
             if text and all(c in allowed_chars for c in text):
                 allowed.append(token_id)
@@ -30,7 +30,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
     elif param_type == "string":
 
         for token_id in range(vocab_size):
-            text: str = model.decode([token_id])
+            text = model.decode([token_id])
 
             if text and "\n" not in text:
                 allowed.append(token_id)
@@ -119,7 +119,7 @@ def get_params(
     system_prompt_ids: list[int],
     function: FunctionDefinition,
     context: DecoderContext,
-):
+) -> None:
     for index, (param_name, param_def) in enumerate(
             function.parameters.items()
             ):
@@ -146,7 +146,7 @@ def get_params(
             time.sleep(0.5)
 
         elif param_def.type == "integer":
-            my_result: list[int] = get_number_param(
+            my_result = get_number_param(
                     model, system_prompt_ids, param_def
                     )
             res.extend(my_result)
@@ -154,7 +154,7 @@ def get_params(
             time.sleep(0.5)
 
         elif param_def.type == "string":
-            my_result: list[int] = get_str_param(
+            my_result = get_str_param(
                     model, system_prompt_ids, param_def
                     )
             res.extend(my_result)

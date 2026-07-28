@@ -1,28 +1,14 @@
 
-from src.models import FunctionDefinition
-
+from src.models import FunctionDefinition , TestPrompt
+from pydantic import ValidationError
 
 
 
 
 ja = {
-    "name": "fn_add_numbers",
-    "description": "Add two numbers together and return their sum.",
-    "parameters": {
-      "a": {
-        "type": "number"
-      },
-      "b": {
-        "type": "number"
-      }
-    },
-    "returns": {
-      "type": "number"
-    }
-  }
+}
 
-a = FunctionDefinition(**ja)
-for  param_name , param_def in a.parameters.items() :
-    # print(a.parameters.items())
-    print(param_name)
-    print(param_def)
+try :
+   a = TestPrompt(**ja)
+except ValidationError as e :
+    print(e)

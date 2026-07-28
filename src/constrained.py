@@ -16,7 +16,7 @@ def constrained_decoding(
     lst_fn: list[FunctionDefinition],
     ui: DecoderUI,
     live: Live,
-):
+) -> str:
     res: list[int] = []
 
     context: DecoderContext = DecoderContext(model, ui, live)

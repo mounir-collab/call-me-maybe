@@ -1,11 +1,12 @@
 from llm_sdk import Small_LLM_Model
 from .models import FunctionDefinition
+from typing import Any
 
 
 def build_system_prompt(
     model: Small_LLM_Model,
     lst_functions: list[FunctionDefinition]
-) -> list[int]:
+) -> Any:
 
     prompt: list[str] = []
 
