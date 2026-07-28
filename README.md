@@ -1,6 +1,6 @@
 *This project has been created as part of the 42 curriculum by manzar.*
 
-# 📞 Call Me Maybe
+# Call Me Maybe
 
 ## Description
 
@@ -16,17 +16,17 @@ The project demonstrates how modern LLMs can safely interact with external tools
 
 # Features
 
-- 🤖 Function selection using constrained decoding
-- 🔒 Schema-aware JSON generation
-- 📄 Guaranteed valid JSON output
-- 🔢 Type-constrained parameter generation
+- Function selection using constrained decoding
+- Schema-aware JSON generation
+- Guaranteed valid JSON output
+- Type-constrained parameter generation
     - Integer
     - Float / Number
     - Boolean
     - String
-- ⚡ Token-by-token decoding
-- 🎨 Interactive terminal visualization using Rich
-- 📁 Automatic generation of result JSON file
+- Token-by-token decoding
+- Interactive terminal visualization using Rich
+- Automatic generation of result JSON file
 
 ---
 
@@ -126,18 +126,6 @@ Escaped characters inside strings are preserved.
 
 ---
 
-### Booleans
-
-Only the tokens corresponding to
-
-```
-true
-false
-```
-
-are allowed.
-
----
 
 ## 4. JSON Construction
 
@@ -250,13 +238,6 @@ Additional prompt constraints and decoding rules were introduced to prevent thes
 
 ---
 
-## Nested token lists
-
-Tokenizer outputs sometimes returned nested lists instead of flat token sequences.
-
-Careful normalization of encoded tokens resolved this issue.
-
----
 
 # Testing Strategy
 
@@ -419,10 +400,9 @@ It was used to:
 - explain tokenizer behavior
 - improve Python code quality
 - assist with debugging
-- improve terminal UI using Rich
 - review the project documentation
 
-All architectural decisions, constrained decoding logic, implementation, testing, debugging, and final validation were completed and verified by the project authors.
+All architectural decisions, constrained decoding logic, implementation, testing, debugging, and final validation were completed and verified by me.
 
 ---
 
