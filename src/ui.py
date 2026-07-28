@@ -1,30 +1,30 @@
 from rich.layout import Layout
 from rich.live import Live
 from rich.panel import Panel
-
+from llm_sdk import Small_LLM_Model
 
 
 class DecoderUI:
 
-    def __init__(self):
+    def __init__(self) -> None:
 
-        self.layout = Layout()
+        self.layout: Layout = Layout()
 
         self.layout.split_column(
             Layout(name="prompt", size=5),
-            Layout(name="json" , size = 12),
+            Layout(name="json", size=12),
         )
 
-        self.prompt = ""
-        self.json = ""
+        self.prompt: str = ""
+        self.json: str = ""
 
-    def set_prompt(self, prompt: str):
+    def set_prompt(self, prompt: str) -> None:
         self.prompt = prompt
 
-    def update_json(self, text: str):
+    def update_json(self, text: str) -> None:
         self.json = text
 
-    def render(self):
+    def render(self) -> Layout:
 
         self.layout["prompt"].update(
             Panel(
@@ -43,19 +43,20 @@ class DecoderUI:
         )
 
         return self.layout
-    
 
-    def reset(self):
-        self.prompt = ""
-        self.json = ""
+    def reset(self) -> None:
+        self.prompt: str = ""
+        self.json: str = ""
+
 
 class DecoderContext:
 
-    def __init__(self, model, ui: DecoderUI, live: Live):
-        self.model = model
-        self.ui = ui
-        self.live = live
+    def __init__(self, model: Small_LLM_Model,
+                 ui: DecoderUI, live: Live) -> None:
+        self.model: Small_LLM_Model = model
+        self.ui: DecoderUI = ui
+        self.live: Live = live
 
-    def refresh(self, res):
+    def refresh(self, res) -> None:
         self.ui.update_json(self.model.decode(res))
         self.live.update(self.ui.render())

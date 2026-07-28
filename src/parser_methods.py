@@ -1,57 +1,65 @@
-
-import json 
-from .models import FunctionDefinition , TestPrompt
+import json
+from .models import FunctionDefinition, TestPrompt
 from pydantic import ValidationError
 
 
 class InputFileError(Exception):
-    """ This for raising error when a file is missing or invalid """
-    
+    """This for raising error when a file is missing or invalid"""
 
-def load_func_def(path : str) -> list[FunctionDefinition]:
-    """ load and validate the function definitions file """
+
+def load_func_def(path: str) -> list[FunctionDefinition]:
+    """load and validate the function definitions file"""
 
     try:
-        with open(path , mode= 'r') as f:
-            content = json.load(f)
-            if not isinstance(content , list):
-                raise InputFileError("The json file should be a list of dict !!!")
+        with open(path, mode="r") as f:
+            content: list[dict] | object = json.load(f)
+            if not isinstance(content, list):
+                raise InputFileError(
+                    "The json file should be a list of dict !!!"
+                    )
     except FileNotFoundError as e:
-        raise InputFileError(f"Functions definition file not found: {path}") from e
-    except json.JSONDecodeError as e :
+        raise InputFileError(
+            f"Functions definition file not found: {path}"
+            ) from e
+    except json.JSONDecodeError as e:
         raise InputFileError(f"Invalid JSON in {path}: {e}") from e
 
-    try :
-        ft_none = FunctionDefinition(**{
+    try:
+        ft_none: FunctionDefinition = FunctionDefinition(
+            **{
                 "name": "ft_none",
-                "description": "No available function matches the user request.",
-                "parameters": {
-                    
-                },
-                "returns": {
-                "type": "null"
-                }
-            })
-        return [FunctionDefinition(**item) for item in content ] + [ft_none]
+                "description":
+                "No available function matches the user request.",
+                "parameters": {},
+                "returns": {"type": "null"},
+            }
+        )
+        return [FunctionDefinition(**item) for item in content] + [ft_none]
     except ValidationError as e:
-        raise InputFileError(f"Invalid function definition schema in {path}: {e}") from e
-    except Exception as e :
-        raise e 
+        raise InputFileError(
+            f"Invalid function definition schema in {path}: {e}"
+        ) from e
+    except Exception as e:
+        raise e
 
 
-def load_test_promts(path : str) :
-    """ this is for loading the json code from the input and validate it """
-    try :
-        with open(path , 'r') as f :
-            content = json.load(f)
-            if not isinstance(content , list):
-                raise InputFileError("The json file should be a list of dict !!!")
+def load_test_promts(path: str):
+    """this is for loading the json code from the input and validate it"""
+    try:
+        with open(path, "r") as f:
+            content: list[dict] | object = json.load(f)
+            if not isinstance(content, list):
+                raise InputFileError(
+                    "The json file should be a list of dict !!!"
+                    )
     except FileNotFoundError as e:
         raise InputFileError(f"Test prompts file not found: {path}") from e
     except json.JSONDecodeError as e:
         raise InputFileError(f"Invalid JSON in {path}: {e}") from e
-    
-    try :
+
+    try:
         return [TestPrompt(**item) for item in content]
     except ValidationError as e:
-        raise InputFileError(f"Invalid test prompt schema in {path}: {e}") from e
+        raise InputFileError(
+            f"Invalid test prompt schema in {path}: {e}"
+            ) from e
