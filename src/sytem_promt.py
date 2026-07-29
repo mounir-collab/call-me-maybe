@@ -7,7 +7,7 @@ def build_system_prompt(
     model: Small_LLM_Model,
     lst_functions: list[FunctionDefinition]
 ) -> Any:
-
+    """Build and encode the system prompt for constrained function calling."""
     prompt: list[str] = []
 
     prompt.append("You are a function calling assistant.")

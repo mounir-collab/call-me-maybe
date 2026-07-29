@@ -44,6 +44,8 @@ def parse_args() -> argparse.Namespace:
 
 
 def main() -> None:
+    """Run the function-calling pipeline
+    from input loading to JSON generation."""
     os.system("clear")
     print("⚙️  Initializing Call Me Maybe...\n")
     start: float = time.time()

@@ -6,6 +6,7 @@ from .ui import DecoderContext
 
 
 def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
+    """Return the vocabulary tokens allowed for a given parameter type."""
     allowed: list[int] = []
 
     vocab_size: int = len(model.get_logits_from_input_ids([0]))
@@ -41,6 +42,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
 def get_number_param(
     model: Small_LLM_Model, system_prompt_ids: list[int], param_def: Any
 ) -> list[int]:
+    """Generate a numeric parameter using constrained decoding."""
     allowed_tokens = get_allowed_tokens(model, param_def.type)
 
     float_tokens: list[int] = []
@@ -75,7 +77,7 @@ def get_str_param(
     system_prompt_ids: list[int],
     param_def: Any,
 ) -> list[int]:
-
+    """Generate a string parameter using constrained decoding."""
     allowed_tokens: list[int] = get_allowed_tokens(model, param_def.type)
 
     result = []
@@ -121,6 +123,7 @@ def get_params(
     function: FunctionDefinition,
     context: DecoderContext,
 ) -> None:
+    """Generate and append all parameters for the selected function."""
     for index, (param_name, param_def) in enumerate(
             function.parameters.items()
             ):

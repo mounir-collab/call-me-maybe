@@ -17,6 +17,8 @@ def constrained_decoding(
     ui: DecoderUI,
     live: Live,
 ) -> str:
+    """Perform constrained decoding
+    and return the generated JSON string."""
     res: list[int] = []
 
     context: DecoderContext = DecoderContext(model, ui, live)

@@ -11,6 +11,8 @@ def get_fn_name(
     lst_fn: list[FunctionDefinition],
     context: DecoderContext
 ) -> str:
+    """Select and decode the most likely
+    function name from the allowed candidates."""
     fn_name: str = ""
 
     for index in range(30):
