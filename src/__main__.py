@@ -6,7 +6,7 @@ from rich.panel import Panel
 from .ui import DecoderUI
 import json
 import argparse
-from .parser_methods import load_func_def, load_test_promts , InputFileError
+from .parser_methods import load_func_def, load_test_promts
 from llm_sdk import Small_LLM_Model
 from .sytem_promt import build_system_prompt
 from .constrained import constrained_decoding
@@ -64,7 +64,6 @@ def main() -> None:
     print("🧠 Loading language model...")
     model: Small_LLM_Model = Small_LLM_Model()
     print("✔️  Language model ready.")
-
     system_prompt_ids: list[int] = build_system_prompt(model, functions)
     lst_fn_names_ids: list[list[int]] = [
         model.encode(fn.name)[0].tolist() for fn in functions

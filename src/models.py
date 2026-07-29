@@ -1,4 +1,4 @@
-from pydantic import BaseModel , Field
+from pydantic import BaseModel, Field
 
 
 class FunctionParms(BaseModel):
@@ -22,4 +22,3 @@ class FunctionDefinition(BaseModel):
 class TestPrompt(BaseModel):
     """Represent a user prompt used for testing."""
     prompt: str = Field(min_length=1)
-    
