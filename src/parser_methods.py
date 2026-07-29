@@ -26,14 +26,7 @@ def load_func_def(path: str) -> list[FunctionDefinition]:
         raise InputFileError(f"Invalid JSON in {path}: {e}")
 
     try:
-        ft_none_data: dict[str, Any] = {
-            "name": "ft_none",
-            "description": "...",
-            "parameters": {},
-            "returns": {"type": "null"},
-        }
-        ft_none = FunctionDefinition(**ft_none_data)
-        return [FunctionDefinition(**item) for item in content] + [ft_none]
+        return [FunctionDefinition(**item) for item in content]
     except ValidationError as e:
         raise InputFileError(
             f"Invalid function definition schema in {path}: {e}"
@@ -57,9 +50,6 @@ def load_test_promts(path: str) -> list[TestPrompt]:
     try:
         return [TestPrompt(**item) for item in content]
     except ValidationError as e:
-        print(e.errors())
-        for error in e.errors():
-            pass
         raise InputFileError(
             f"Invalid test prompt schema in {path}: {e}"
             )
