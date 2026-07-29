@@ -14,7 +14,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
         allowed_chars = set("-0123456.789,}")
 
         for token_id in range(vocab_size):
-            text = model.decode([token_id])
+            text = model.decode(token_id)
 
             if text and all(c in allowed_chars for c in text):
                 allowed.append(token_id)
@@ -22,7 +22,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
         allowed_chars = set("0123456789},")
 
         for token_id in range(vocab_size):
-            text = model.decode([token_id])
+            text = model.decode(token_id)
 
             if text and all(c in allowed_chars for c in text):
                 allowed.append(token_id)
@@ -30,7 +30,7 @@ def get_allowed_tokens(model: Small_LLM_Model, param_type: str) -> list[int]:
     elif param_type == "string":
 
         for token_id in range(vocab_size):
-            text = model.decode([token_id])
+            text = model.decode(token_id)
 
             if text and "\n" not in text:
                 allowed.append(token_id)
@@ -55,7 +55,7 @@ def get_number_param(
 
         next_token: int = max(allowed_tokens, key=lambda token: logits[token])
         max_tokens += 1
-        decoded: str = model.decode([next_token])
+        decoded: str = model.decode(next_token)
         if "," in decoded or "}" in decoded:
             break
         float_tokens.append(next_token)
@@ -79,8 +79,8 @@ def get_str_param(
     allowed_tokens: list[int] = get_allowed_tokens(model, param_def.type)
 
     result = []
-
-    while True:
+    max_tokens: int = 0
+    while max_tokens < 100:
 
         logits: list[float] = model.get_logits_from_input_ids(
                 system_prompt_ids
@@ -89,6 +89,7 @@ def get_str_param(
         next_token: int = max(allowed_tokens, key=lambda t: logits[t])
 
         decoded: str = model.decode([next_token])
+        max_tokens += 1
         # Did we reach the closing quote?
         if '"' in decoded:
 

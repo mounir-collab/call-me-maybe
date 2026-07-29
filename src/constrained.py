@@ -1,5 +1,5 @@
 from llm_sdk import Small_LLM_Model
-from .utils import get_fn_name
+from .get_fn_name import get_fn_name
 from .models import TestPrompt, FunctionDefinition
 from .params import get_params
 import json
