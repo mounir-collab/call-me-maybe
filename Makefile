@@ -1,5 +1,3 @@
-NAME = call-me-maybe
-
 PYTHON = python
 UV = uv
 
